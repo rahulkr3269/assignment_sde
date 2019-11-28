@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 #include <tchar.h>
 #include <Windows.h>
 
@@ -18,7 +17,7 @@ const int ConnectSTARTTLS = 2;
 const int ConnectDirectSSL = 3;
 const int ConnectTryTLS = 4;
 
-int mailsend()
+int mailsend(string recipient, string msg)
 {
 	::CoInitialize(NULL);
 
@@ -29,10 +28,12 @@ int mailsend()
 	// Set your sender email address
 	oSmtp->FromAddr = _T("rahulkr.nssc@gmail.com");
 	// Add recipient email address
-	oSmtp->AddRecipientEx(_T("rahulkr3269@gmail.com"), 0);
+	_bstr_t sa_1(recipient.c_str());
+
+	oSmtp->AddRecipientEx(_T(sa_1), 0);
 
 	// Set email subject
-	oSmtp->Subject = _T("simple email from Visual C++ project");
+	oSmtp->Subject = _T("Guest Activity Details");
 	// Set email body
 	oSmtp->BodyText = _T("this is a test email sent from Visual C++ project, do not reply");
 
@@ -42,18 +43,18 @@ int mailsend()
 	// User and password for ESMTP authentication, if your server doesn't
 	// require User authentication, please remove the following codes.
 	oSmtp->UserName = _T("rahulkr.nssc@gmail.com");
-	oSmtp->Password = _T("password");
+	oSmtp->Password = _T("design@2019");
 
 	// Most mordern SMTP servers require SSL/TLS connection now.
 	// ConnectTryTLS means if server supports SSL/TLS, SSL/TLS will be used automatically.
-	//oSmtp->ConnectType = ConnectTryTLS;
+	oSmtp->ConnectType = ConnectTryTLS;
 
 	// If your SMTP server uses 587 port
-	//oSmtp->ServerPort = 587;
+	oSmtp->ServerPort = 587;
 
 	// If your SMTP server requires SSL/TLS connection on 25/587/465 port
-	 oSmtp->ServerPort = 25; // 25 or 587 or 465
-	 oSmtp->ConnectType = ConnectSSLAuto;
+	// oSmtp->ServerPort = 587; // 25 or 587 or 465
+	 //oSmtp->ConnectType = ConnectSSLAuto;
 
 	_tprintf(_T("Start to send email ...\r\n"));
 
@@ -73,7 +74,7 @@ int mailsend()
 
 int main()
 {
-	mailsend();
+	
 	int n;
 
 	
@@ -131,8 +132,13 @@ int main()
 			time_t my_time = time(NULL);
 
 			data[checkin_count][4] = ctime(&my_time);
-			checkin_count++;
+			
 
+			string msg=" Guest Check-In Details \n Name : "+ data[checkin_count][1]+"\n Email : "+ data[checkin_count][3]+"\n Phone : "+ data[checkin_count][2]+"\n Check In Day, Date, Time : "+ data[checkin_count][4];
+			cout << "\n" << msg;
+
+			mailsend(data[checkin_count][3],msg)
+			checkin_count++;
 		}
 
 		if (ch == 2)
@@ -180,8 +186,10 @@ int main()
 			data[index][5] = ctime(&my_time);
 
 
-			cout << "\n\n" << data[index][0] << "\n" << data[index][1] << "\n" << data[index][2] << "\n" << data[index][3] << "\n" << data[index][4] << "\n" << data[index][5] << "\n";
+			string msg=" Guest Check-In Details \n Name : "+ data[index][1]+"\n Email : "+ data[index][3]+"\n Phone : "+ data[index][2]+"\n Check In Day, Date, Time : "+ data[index][4]+"\n Check Out Day, Date, Time : "+ data[index][5];
+			cout << "\n" << msg;
 
+			mailsend(data[index][3],msg)
 
 		}
 		
