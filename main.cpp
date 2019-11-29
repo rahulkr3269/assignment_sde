@@ -43,7 +43,7 @@ int mailsend(string recipient, string msg)
 	// User and password for ESMTP authentication, if your server doesn't
 	// require User authentication, please remove the following codes.
 	oSmtp->UserName = _T("rahulkr.nssc@gmail.com");
-	oSmtp->Password = _T("design@2019");
+	oSmtp->Password = _T(password);
 
 	// Most mordern SMTP servers require SSL/TLS connection now.
 	// ConnectTryTLS means if server supports SSL/TLS, SSL/TLS will be used automatically.
